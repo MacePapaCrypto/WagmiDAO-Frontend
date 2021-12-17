@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { Context } from "../Store";
 import MintFrame from "./MintFrame";
 import RedeemFrame from "./RedeemFrame";
 
 export default function MintModalWenDaiLP() {
     
+    const [state, dispatch]:any = useContext(Context);
     const [mintOrRedeem, setMintOrRedeem] = useState('mint');
 
     function changeToMintFrame() {
@@ -27,11 +29,11 @@ export default function MintModalWenDaiLP() {
             <div className="mint-modal-prices">
                 <div className="mint-modal-price">
                     <div className="title">Mint Price</div>
-                    <div className="value">$742.00</div>
+                    <div className="value">{state.wenPrice * state.lpDiscount}</div>
                 </div>
                 <div className="mint-modal-price">
                     <div className="title">WEN Price</div>
-                    <div className="value">$842.00</div>
+                    <div className="value">{state.wenPrice}</div>
                 </div>
             </div>
             <div className="bond-form">

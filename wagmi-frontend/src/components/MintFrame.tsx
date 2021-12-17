@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Context } from '../Store';
 import { 
     checkApprovedDaiForMint, checkWenDaiLPApprovedForMint, approveWenDaiLPToMint,
-    approveDaiToMint, mintWenDaiLP, mintDai, redeemBonds, redeemBondsAndStake
+    approveDaiToMint, mintWenDaiLP, mintDai
 } from '../functions/ethersFunctions';
 
 export default function MintFrame() {
@@ -66,7 +66,7 @@ export default function MintFrame() {
                         <a 
                             href="#"
                             className="bond-default-button mint-button"
-                            onClick={async () => await mintWenDaiLP(dispatch, spendInput, state.slippage)}
+                            onClick={async () => await mintWenDaiLP(dispatch, spendInput, state.slippage, state.wenPrice)}
                         >
                             Bond LP and Mint Wen
                         </a> : (state.whichBond === "DAI" && !state.isDaiApprovedForMint && !loading) ?
@@ -137,15 +137,6 @@ export default function MintFrame() {
                     </div>
                     <div className="bond-balance-value">
                         5 Days
-                    </div>
-                </div>
-
-                <div className="bond-balance-info">
-                    <div className="bond-balance-title">
-                        Minimum purchase
-                    </div>
-                    <div className="bond-balance-value">
-                        0.01 WEN
                     </div>
                 </div>
 

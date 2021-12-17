@@ -39,7 +39,7 @@ export default function DashboardPage() {
                                         Backing per $WEN
                                     </div>
                                     <div className="dashboard-data-value">
-                                        $610
+                                        {state.backingPerWen}
                                     </div>
                                 </div>
 
@@ -49,7 +49,7 @@ export default function DashboardPage() {
                                         Treasury Balance
                                     </div>
                                     <div className="dashboard-data-value">
-                                        $69,008,991
+                                        {state.treasuryTVL}
                                     </div>
                                 </div>
 
@@ -59,7 +59,7 @@ export default function DashboardPage() {
                                     APY
                                     </div>
                                     <div className="dashboard-data-value">
-                                        544,757.5%
+                                        {state.stakeAPY}
                                     </div>
                                 </div>
 
@@ -68,7 +68,7 @@ export default function DashboardPage() {
                                         Total Staked
                                     </div>
                                     <div className="dashboard-data-value">
-                                        180,098
+                                        {state.wenStaked}
                                     </div>
                                 </div>
 

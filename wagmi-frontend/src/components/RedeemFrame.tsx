@@ -1,29 +1,38 @@
+import { useContext, useEffect } from "react";
+import { redeemBondsAndStakeForLP, redeemBondsForDai, redeemBondsForLP } from "../functions/ethersFunctions";
+import { Context } from "../Store";
+
 export default function RedeemFrame() {
+
+    const [state, dispatch]:any = useContext(Context);
+
     return(
         <div className="bond-frame">
-            <a href="#" className="bond-default-button redeem-button">
-                Claim
-            </a>
-            <a href="#" className="bond-default-button redeem-button">
-                Claim & Autostake
-            </a>
+            {
+                state.whichBond === 'LP' ? 
+                <><a href="#" className="bond-default-button redeem-button" onClick={() => redeemBondsForLP(dispatch)}>
+                        Claim
+                  </a>
+                  <a href="#" className="bond-default-button redeem-button" onClick={() => redeemBondsAndStakeForLP(dispatch)}>
+                            Claim & Autostake
+                  </a></> :
+                <><a href="#" className="bond-default-button redeem-button" onClick={() => redeemBondsForDai(dispatch)}>
+                    Claim
+                </a>
+                <a href="#" className="bond-default-button redeem-button" onClick={() => redeemBondsForDai(dispatch)}>
+                    Claim & Autostake
+                </a></>
+            
+            }
+            
 
             <div className="bond-balance">
-                <div className="bond-balance-info">
-                    <div className="bond-balance-title">
-                        Pending Rewards
-                    </div>
-                    <div className="bond-balance-value">
-                        0 WEN
-                    </div>
-                </div>
-
                 <div className="bond-balance-info">
                     <div className="bond-balance-title">
                         Claimable Rewards
                     </div>
                     <div className="bond-balance-value">
-                        0 WEN
+                        {state.claimableRewards}
                     </div>
                 </div>
 
@@ -32,7 +41,7 @@ export default function RedeemFrame() {
                         Time until fully vested
                     </div>
                     <div className="bond-balance-value">
-                        5 Days
+                        {state.timeLeftVested}
                     </div>
                 </div>
 
@@ -41,7 +50,7 @@ export default function RedeemFrame() {
                         ROI
                     </div>
                     <div className="bond-balance-value">
-                        5.95%
+                        {state.whichBond === 'LP' ? state.lpBondROI : state.daiBondROI}
                     </div>
                 </div>
 

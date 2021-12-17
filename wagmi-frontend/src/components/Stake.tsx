@@ -88,10 +88,6 @@ export default function StakePage() {
                         <div className="moduleWrapper">
                             <div className="module-header">
                                 <h1>Stake (WEN,WEN)</h1>
-                                <div className="rebase-timer">
-                                    <p><span>3</span>HOURS, <span>28</span>MINS</p>
-                                    <p style={{letterSpacing: "0.25rem"}}>TO NEXT REBASE</p>
-                                </div>
                             </div>
                             <div className="stake-module">
                                 <div className="stake-tabs">

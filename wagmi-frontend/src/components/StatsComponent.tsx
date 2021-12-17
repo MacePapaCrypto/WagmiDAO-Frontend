@@ -1,7 +1,11 @@
+import { useContext } from 'react';
+import { Context } from '../Store';
 import '../styling/default.css';
 
 export default function StatsComponent() {
 
+    const [state, dispatch]:any = useContext(Context);
+    
     let statsButton =  document.querySelector(".statsButton");
     let statsSection =  document.querySelector(".statsSection");
 
@@ -24,29 +28,23 @@ export default function StatsComponent() {
 
             <div className="TVLStats">
                 <div className="TVL">
-                    <span>TVL</span> <div className="tvlVal"> $1,358,558,228</div>
+                    <span>TVL</span> <div className="tvlVal">{state.stakedTVL}</div>
                 </div>
                 <div className="APY">
-                    <span>APY</span> <div className="apyVal"> 8,123,456.3%</div>
+                    <span>APY</span> <div className="apyVal">{state.stakeAPY}</div>
                 </div>
                 <div className="CurrentIndex">
-                    <span>Current Index</span> <div className="currentIndexVal">3.35 WEN</div>
+                    <span>Current Index</span> <div className="currentIndexVal">{state.index}</div>
                 </div>
             </div>
 
             <div className="mintStats">
                 <h3>Mint Discounts</h3>
                 <div className="mintPairs">
-                    <div className="mintPair">WEN-MIM LP</div> <div className="mintDiscount">6.64%</div>
+                    <div className="mintPair">WEN-DAI LP</div> <div className="mintDiscount">69.6%</div>
                 </div>
                 <div className="mintPairs">
-                    <div className="mintPair">WEN-MIM LP</div> <div className="mintDiscount">6.64%</div>
-                </div>
-                <div className="mintPairs">
-                    <div className="mintPair">WEN-MIM LP</div> <div className="mintDiscount">6.64%</div>
-                </div>
-                <div className="mintPairs">
-                    <div className="mintPair">WEN-MIM LP</div> <div className="mintDiscount">6.64%</div>
+                    <div className="mintPair">DAI</div> <div className="mintDiscount">6.69%</div>
                 </div>
             </div>
 

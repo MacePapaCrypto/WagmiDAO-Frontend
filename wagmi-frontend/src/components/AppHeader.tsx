@@ -61,7 +61,7 @@ function AppHeader() {
               <img src="images/Branding/Logo/logo.svg" alt="WAGMI DAO" />
           </a>
 
-          <div className="priceTag"><img src="/images/Icons/wen-price-logo.svg" alt=""/>{'$' + state.wenPrice}</div>
+          <div className="priceTag"><img src="/images/Icons/wen-price-logo.svg" alt=""/>{'$' + new Intl.NumberFormat('en-US').format(parseFloat(state.wenPrice))}</div>
           <div className="themeModeButtons">
               <a href="#" className="darkModeButton"><img src="/images/Icons/cloud.svg" alt="Switch to dark mode" /></a>
               <a href="#" className="defaultThemeButton"><img src="/images/Icons/sun.svg" alt="Switch to default theme" /></a>

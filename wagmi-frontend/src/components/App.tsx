@@ -6,7 +6,7 @@ import { ethers } from 'ethers';
 
 import AppHeader from './AppHeader';
 
-import { getWenPrice, initializeEthers } from '../functions/ethersFunctions';
+import { getAPY, getBalanceOfDai, getBalanceOfLP, getClaimableRewards, getROI, getStakingTVL, getTreasuryTVL, getWenPrice, getWenSupply, initializeEthers } from '../functions/ethersFunctions';
 
 import '../styling/App.css';
 import Footer from './Footer';
@@ -29,9 +29,47 @@ function App() {
     }
   }
   
+
+
+  const fetchWenSupply = async () => {
+    await getWenSupply(dispatch);
+  }
+
   const fetchWenPrice = async () => {
     await getWenPrice(dispatch);
     console.log("This is wen price: " + state.wenPrice);
+  }
+
+  const fetchWenMarketCap = async () => {
+    dispatch({type: 'marketCap', content: (state.wenPrice * state.totalSupply)});
+  }
+
+  const fetchStakingTVL = async () => {
+    await getStakingTVL(dispatch);
+  }
+  
+  const fetchStakeAPY = async () => {
+    await getAPY(dispatch);
+  }
+
+  const fetchTreasuryTVL = async () => {
+    await getTreasuryTVL(dispatch);
+  }
+
+  const fetchROI = async () => {
+    await getROI(dispatch);
+  }
+
+  const fetchClaimableRewards = async () => {
+    await getClaimableRewards(dispatch);
+  }
+
+  const fetchDaiBalance = async () => {
+    await getBalanceOfDai(dispatch);
+  }
+
+  const fetchLPBalance = async () => {
+    await getBalanceOfLP(dispatch);
   }
 
   useEffect(() => {
@@ -48,7 +86,16 @@ function App() {
   }, []);
 
   useEffect(() => {
-    fetchWenPrice()
+    fetchWenPrice();
+    fetchWenSupply();
+    fetchWenMarketCap();
+    //fetchStakingTVL();
+    //fetchStakeAPY();
+    //fetchTreasuryTVL();
+    //fetchROI();
+    //fetchClaimableRewards();
+    fetchDaiBalance();
+    fetchLPBalance();
   }, [state.triggerAll]);
 
   return (

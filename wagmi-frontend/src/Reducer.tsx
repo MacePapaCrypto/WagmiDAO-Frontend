@@ -12,9 +12,24 @@ export const defaultState = {
     slippage: 0,
     wenBalance: "",
     sWenBalance: "",
-    wenPrice: "",
-    marketCap: "",
+    wenPrice: 0,
+    marketCap: 0,
     triggerAll: false,
+    totalWenSupply: 0,
+    backingPerWen: 0,
+    treasuryTVL: 0,
+    stakeAPY: 0,
+    wenStaked: 0,
+    claimableRewards: 0,
+    lpBondROI: 0,
+    daiBondROI: 0,
+    timeLeftVested: 0,
+    balanceOfLP: 0,
+    index: 0,
+    daiDiscount: 0,
+    lpDiscount: 0,
+    maxPayoutDai: 0,
+    maxPayoutLP: 0,
 };
 
 const formatAddress = (addressString:any) => {
@@ -107,6 +122,81 @@ const Reducer = (state:any, action:any) => {
           ...state,
           triggerAll: action.content
         }
+      case 'totalWenSupply':
+        return {
+          ...state,
+          totalWenSupply: action.content
+        }
+        case 'backingPerWen':
+          return {
+            ...state,
+            backingPerWen: action.content
+          }
+        case 'treasuryTVL':
+          return {
+            ...state,
+            treasuryTVL: action.content
+          }
+        case 'stakeAPY':
+          return {
+            ...state,
+            stakeAPY: action.content
+          }
+        case 'wenStaked':
+          return {
+            ...state,
+            wenStaked: action.content
+          }
+        case 'claimableRewards':
+          return {
+            ...state,
+            claimableRewards: action.content
+          }
+        case 'lpBondROI':
+          return {
+            ...state,
+            lpBondROI: action.content
+          }
+        case 'daiBondROI':
+          return {
+            ...state,
+            daiBondROI: action.content
+          }
+        case 'timeLeftVested':
+          return {
+            ...state,
+            timeLeftVested: action.content
+          }
+        case 'balanceOfLP':
+          return {
+            ...state,
+            balanceOfLP: action.content
+          }
+        case 'index':
+          return {
+            ...state,
+            index: action.content
+          }
+        case 'daiDiscount':
+          return {
+            ...state,
+            daiDiscount: action.content
+          }
+        case 'lpDiscount':
+          return {
+            ...state,
+            lpDiscount: action.content
+          }
+        case 'maxPayoutDai':
+          return {
+            ...state,
+            maxPayoutDai: action.content
+          }
+        case 'maxPayoutLP':
+          return {
+            ...state,
+            maxPayoutLP: action.content
+          }
     default:
       return state;
   }

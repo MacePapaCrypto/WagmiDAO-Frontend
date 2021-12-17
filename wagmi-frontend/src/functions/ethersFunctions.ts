@@ -3,7 +3,16 @@ import WenABI from '../contractABIs/WenABI.json';
 import sWenABI from '../contractABIs/sWenABI.json';
 import wenDaiLPABI from '../contractABIs/wenDaiLPABI.json';
 import daiABI from '../contractABIs/daiABI.json';
-import spookyRouterABI from '../contractABIs/spookyRouterABI.json';
+import treasuryABI from '../contractABIs/treasuryABI.json';
+import distributorABI from '../contractABIs/distributorABI.json';
+import wenStakingHelperABI from '../contractABIs/wenStakingHelperABI.json';
+import wenStakingABI from '../contractABIs/wenStakingABI.json';
+import stakingWarmupABI from '../contractABIs/stakingWarmupABI.json';
+import daiBondDepositoryABI from '../contractABIs/daiBondDepositoryABI.json';
+import bondingCalcABI from '../contractABIs/bondingCalcABI.json';
+import { useContext } from 'react';
+import { Context } from '../Store';
+
 
 declare const window:any;
 let provider:any = undefined;
@@ -13,9 +22,12 @@ let wenStakingHelperContract:any = undefined;
 let wenStakingContract:any = undefined;
 let wenDaiLPContract:any = undefined;
 let daiContract:any = undefined;
-let spookyRouterContract:any = undefined;
+let treasuryContract:any = undefined;
+let distributorContract:any = undefined;
+let wenStakingWarmupContract:any = undefined;
+let daiBondDepositoryContract:any = undefined;
+let bondingCalculatorContract:any = undefined;
 const FANTOM_NETWORK_ID = "250";
-
 
 //Provider and Initialization
 export const initializeEthers = async (dispatch:any) => {
@@ -36,7 +48,7 @@ export const initializeEthers = async (dispatch:any) => {
       signer
     );
     sWenContract = new ethers.Contract(
-      "0x31Ec41694f3D31A905C5eb15a35477811Cc3bC33",
+      "0x74d02d9cfe67f1fc60019db470b46f5b0dc82b32",
       sWenABI,
       signer
     );
@@ -50,23 +62,41 @@ export const initializeEthers = async (dispatch:any) => {
       daiABI,
       signer
     );
-    /*
+    treasuryContract = new ethers.Contract(
+      "0x25b6e27a7279ae1ea95d29078d1d35200813035c",
+      treasuryABI,
+      signer
+    );
     wenStakingHelperContract = new ethers.Contract(
-      "",
+      "0xaf9e3ce67bd74570fc3e3b4c1b985c2af0f0d0dc",
       wenStakingHelperABI,
       signer
     );
     wenStakingContract = new ethers.Contract(
-      "",
+      "0x1a16805c1e60e7bf206304efdf31e7b8a151235b",
       wenStakingABI,
       signer
     );
-    wenBondDepositoryContract = new ethers.Contract(
-      "",
-      wenBondDepositoryABI,
+    wenStakingWarmupContract = new ethers.Contract(
+      "0x1176551a5bf1fa27caef9ea5dcb4762e9b4f0859",
+      stakingWarmupABI,
       signer
-    )
-    */
+    );
+    daiBondDepositoryContract = new ethers.Contract(
+      "0x7f4aea8a240a8f5c0e62eb387d1f929536e1b756",
+      daiBondDepositoryABI,
+      signer
+    );
+    bondingCalculatorContract = new ethers.Contract(
+      "0xffb293e20babd58cb10d3c3640b2806da63ad4a8",
+      bondingCalcABI,
+      signer
+    );
+    distributorContract = new ethers.Contract(
+      "0xef171963a1ca74eaa47cd98f3d53a44269fbcff8",
+      distributorABI,
+      signer
+    );
 
     return addr;
   } catch (error) {
@@ -86,6 +116,17 @@ export const checkNetwork = () => {
 }
 
 //Contract Queries for various data
+export const getTreasuryTVL = async (dispatch:any) => {
+  try {
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+    const treasuryDai = await daiContract.balanceOf("0xdbf0dd0000aa9b46882659caf54ff638b022bff1");
+    const treasuryLP = await wenDaiLPContract.balanceOf("0xdbf0dd0000aa9b46882659caf54ff638b022bff1");
+    dispatch({type: 'treasuryTVL', content: (treasuryDai + treasuryLP)});
+  } catch(error) {
+    console.log(error);
+  }
+}
+
 export const getWenPrice = async (dispatch:any) => {
   try {
     provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -97,9 +138,25 @@ export const getWenPrice = async (dispatch:any) => {
     //console.log(daiReserveAmount.toString());
     const wenTokenPrice = daiReserveAmount.div(wenReserveAmount).div(1e7);
     console.log(wenTokenPrice.toString());
-    dispatch({type: 'wenPrice', content: wenTokenPrice.toString()});
+    let stringWenPrice = wenTokenPrice.toString();
+    let resStr = stringWenPrice.substring(0,stringWenPrice.length-2)+"."+stringWenPrice.substring(stringWenPrice.length-2);
+    console.log(resStr);
+    dispatch({type: 'wenPrice', content: parseFloat(resStr)});
   } catch(error) {
     return console.log(error);
+  }
+}
+
+export const getWenSupply = async (dispatch:any) => {
+  try {
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+    const supplyOfWen = await wenContract.totalSupply();
+    let value = (supplyOfWen.div(1e9).toFixed(9));
+    console.log(value);
+    console.log(supplyOfWen.div(1e9).toString());
+    dispatch({type: 'totalWenSupply', content: value});
+  } catch(error) {
+    console.log(error);
   }
 }
 
@@ -109,6 +166,49 @@ export const mintDiscounts = async (dispatch:any) => {
     const signer = provider.getSigner();
   } catch {
     return console.log("Error getting mint discounts");
+  }
+}
+
+export const getMaxBuyFromLP = async (dispatch:any) => {
+  try {
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+  } catch(error) {
+    console.log(error);
+  }
+}
+
+export const getMaxBuyFromDai = async (dispatch:any) => {
+  try {
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const maxPayout = await daiBondDepositoryContract.maxPayout();
+    dispatch({type: 'maxPayoutDai', content: maxPayout})
+  } catch(error) {
+    console.log(error);
+  }
+}
+
+export const getBalanceOfDai = async (dispatch:any) => {
+  try {
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const daiBalance = await daiContract.balanceOf(signer.getAddress());
+    console.log(daiBalance.toString());
+    dispatch({type: "balanceOfDai", content: daiBalance.toString()});
+  } catch {
+    return console.log("Error getting wen balance");
+  }
+}
+
+export const getBalanceOfLP = async (dispatch:any) => {
+  try {
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const lpBalance = await wenDaiLPContract.balanceOf(signer.getAddress());
+    console.log(lpBalance.toString());
+    dispatch({type: "balanceOfLP", content: lpBalance.toString()});
+  } catch {
+    return console.log("Error getting wen balance");
   }
 }
 
@@ -154,6 +254,16 @@ export const nextRewardYield = async (dispatch:any) => {
   }
 }
 
+export const getClaimableRewards = async (dispatch:any) => {
+  try {
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+  } catch(error) {
+    return console.log(error);
+  }
+}
+
+//can get ROI for both contracts here
 //nextRewardsYield * nbEpoch/day * 5 to derive value
 export const getROI = async (dispatch:any) => {
   try {
@@ -208,7 +318,7 @@ export const checkApprovedForStaking = async (dispatch:any) => {
     provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     //second address param needs to be changed to staking contract when deployed
-    const wenBalanceApproved = await wenContract.allowance(signer.getAddress(), signer.getAddress());
+    const wenBalanceApproved = await wenContract.allowance(signer.getAddress(), wenStakingHelperContract.address);
     console.log(wenBalanceApproved.toString());
     if(wenBalanceApproved.toString() === '0') {
       dispatch({type: 'isWenApprovedForStaking', content: false});
@@ -247,7 +357,7 @@ export const checkApprovedForUnstaking = async (dispatch:any) => {
 export const checkWenDaiLPApprovedForMint = async (dispatch:any) => {
   try {
     provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner(0);
+    const signer = provider.getSigner();
     const connectedWenDaiLPContract = await wenDaiLPContract.connect(signer);
     //Need to change spender to staking contract after deploy
     const approvedBalance = await connectedWenDaiLPContract.allowance(signer.getAddress(), signer.getAddress());
@@ -266,10 +376,10 @@ export const checkWenDaiLPApprovedForMint = async (dispatch:any) => {
 export const checkApprovedDaiForMint = async (dispatch:any) => {
   try {
     provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner(0);
+    const signer = provider.getSigner();
     const connectedDaiContract = await daiContract.connect(signer);
     //Need to change spender to staking contract after deploy
-    const approvedBalance = await connectedDaiContract.allowance(signer.getAddress(), signer.getAddress());
+    const approvedBalance = await connectedDaiContract.allowance(wenStakingHelperContract.address, signer.getAddress());
     if(approvedBalance.toString() === '0') {
       dispatch({type: 'isDaiApprovedForMint', content: false});
       console.log(approvedBalance.toString());
@@ -284,11 +394,12 @@ export const checkApprovedDaiForMint = async (dispatch:any) => {
 
 export const approveWenToStake = async (dispatch:any, amountToSpend:any) => {
     provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner(0);
+    const signer = provider.getSigner();
+    console.log(signer);
     try {
       const connectedWenContract = await wenContract.connect(signer);
       //Need to change spender to staking contract after deploy
-      const tx = await connectedWenContract.approve(signer.getAddress(), amountToSpend);
+      const tx = await connectedWenContract.approve(wenStakingHelperContract.address, amountToSpend);
       console.log("Changing approved state to true");
       dispatch({type: 'isWenApprovedForStaking', content: true});
     } catch {
@@ -299,7 +410,7 @@ export const approveWenToStake = async (dispatch:any, amountToSpend:any) => {
 export const approveStakedWenToUnstake = async (dispatch:any, amountToSpend:any) => {
   try {
     provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner(0);
+    const signer = provider.getSigner();
     const connectedsWenContract = await sWenContract.connect(signer);
     //Need to change spender to staking contract after deploy
     const tx = await connectedsWenContract.approve(signer.getAddress(), amountToSpend);
@@ -312,7 +423,7 @@ export const approveStakedWenToUnstake = async (dispatch:any, amountToSpend:any)
 export const approveWenDaiLPToMint = async (dispatch:any, amountToSpend:any) => {
   try {
     provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner(0);
+    const signer = provider.getSigner();
     const connectedWenDaiLPContract = await wenDaiLPContract.connect(signer);
     //Need to change spender to staking contract after deploy
     const tx = await connectedWenDaiLPContract.approve(signer.getAddress(), amountToSpend);
@@ -325,93 +436,102 @@ export const approveWenDaiLPToMint = async (dispatch:any, amountToSpend:any) => 
 export const approveDaiToMint = async (dispatch:any, amountToSpend:any) => {
   try {
     provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner(0);
+    const signer = provider.getSigner();
     const connectedDaiContract = await daiContract.connect(signer);
     //Need to change spender to staking contract after deploy
     const tx = await connectedDaiContract.approve(signer.getAddress(), amountToSpend);
     dispatch({type: 'isDaiApprovedForMint', content: true});
-  } catch {
-    return console.log("error with Dai approve");
+  } catch(error) {
+    return console.log(error);
   }
 }
 
 export const stakeWen = async (dispatch:any, amountToStake:any) => {
   try {
     provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner(0);
+    const signer = provider.getSigner();
+    console.log(signer);
+    console.log(ethers.BigNumber.from(ethers.utils.parseEther(amountToStake.toString())));
     const connectedStakingHelperContract = await wenStakingHelperContract.connect(signer);
-    const estimateGas = await connectedStakingHelperContract.estimateGas.stake(signer.getAddress(), 
-      {
-        value: ethers.utils.parseEther(amountToStake)
-      }
-    );
-    const tx = await connectedStakingHelperContract.stake(signer.getAddres(),
-      {
-        value: ethers.utils.parseEther(amountToStake),
-        gasLimit: estimateGas
-      }  
-    );
+    const tx = await connectedStakingHelperContract.stake(ethers.BigNumber.from(ethers.utils.parseEther(amountToStake.toString())), signer.getAddress());
     dispatch({type: 'isUserStaked', content: true});
-  } catch {
-    return console.log("Failed to stake");
+  } catch(error) {
+    return console.log(error);
   } 
 }
 
 export const unstakeWen = async (dispatch:any, amountToUnstake:any) => {
   try {
     provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner(0);
+    const signer = provider.getSigner();
     const connectedStakingContract = await wenStakingContract.connect(signer);
     const estimateGas = await connectedStakingContract.estimateGas.stake(1, 
       {
-        value: ethers.utils.parseEther(amountToUnstake)
+        value: ethers.utils.parseEther(amountToUnstake.toString())
       }
     );
     const tx = await connectedStakingContract.stake(1,
       {
-        value: ethers.utils.parseEther(amountToUnstake),
+        value: ethers.utils.parseEther(amountToUnstake.toString()),
         gasLimit: estimateGas
       }  
     );
     dispatch({type: 'isUserStaked', content: false});
-  } catch {
-    return console.log("Failed to unstake");
+  } catch(error) {
+    return console.log(error);
   }
 }
 
-export const mintWenDaiLP = async (dispatch:any, amountToSpend:any, slippage:any) => {
+export const mintWenDaiLP = async (dispatch:any, amountToSpend:any, slippage:any, wenPrice:any) => {
   try {
-    const basePrice = 0; //Figure out where to get this value from Sluia
     provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner(0);
-    const maxPrice = basePrice + ((slippage / 100) * basePrice);
-  } catch {
-    console.log("Error Bonding LP");
+    const signer = provider.getSigner();
+    const maxPrice = wenPrice + ((slippage / 100) * wenPrice);
+  } catch(error) {
+    console.log(error);
   }
 }
 
 export const mintDai = async (dispatch:any, amountToSpend:any, slippage:any) => {
   try {
     provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner(0);
-  } catch {
-    console.log("Error Bonding DAI");
+    const signer = provider.getSigner();
+  } catch(error) {
+    console.log(error);
   }
 }
 
-export const redeemBonds = async (dispatch:any) => {
+export const redeemBondsForLP = async (dispatch:any) => {
   try {
     provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner(0);
+    const signer = provider.getSigner();
   } catch {
     console.log("Error claiming, no staking")
   }
 }
 
-export const redeemBondsAndStake = async (dispatch:any) => {
+export const redeemBondsAndStakeForLP = async (dispatch:any) => {
   try {
     provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner(0);
+    const signer = provider.getSigner();
+  } catch {
+    console.log("Error claiming, no staking")
+  }
+}
+
+export const redeemBondsForDai = async (dispatch:any) => {
+  try {
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+  } catch {
+    console.log("Error claiming, no staking")
+  }
+}
+
+export const redeemBondsAndStakeForDai = async (dispatch:any) => {
+  try {
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
   } catch {
     console.log("Error claiming, no staking")
   }

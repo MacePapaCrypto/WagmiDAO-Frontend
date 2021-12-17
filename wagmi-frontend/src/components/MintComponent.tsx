@@ -30,10 +30,6 @@ export default function MintPage() {
                         <div className="moduleWrapper">
                             <div className="module-header">
                                 <h1>Mint (WEN,WEN)</h1>
-                                <div className="rebase-timer">
-                                    <p><span>3</span>HOURS, <span>28</span>MINS</p>
-                                    <p style={{ letterSpacing: "0.25rem" }}>TO NEXT REBASE</p>
-                                </div>
                             </div>
 
                             <div className="mint-module">
@@ -55,7 +51,7 @@ export default function MintPage() {
                                         <div className="mint-card-info">
                                             Price ($)
                                             <span className="mint-price">
-                                                1234.4321
+                                                ???
                                             </span>
 
                                         </div>
@@ -63,7 +59,7 @@ export default function MintPage() {
                                         <div className="mint-card-info">
                                             Roi
                                             <span className="mint-roi">
-                                                7%
+                                                {state.lpBondROI}
                                             </span>
 
                                         </div>
@@ -71,7 +67,7 @@ export default function MintPage() {
                                         <div className="mint-card-info">
                                             Purchased ($)
                                             <span className="purchased-price">
-                                                1234.4321
+                                                {state.balanceOfLP}
                                             </span>
 
                                         </div>
@@ -97,7 +93,7 @@ export default function MintPage() {
                                         <div className="mint-card-info">
                                             Price ($)
                                             <span className="mint-price">
-                                                1234.4321
+                                                1.0
                                             </span>
 
                                         </div>
@@ -105,7 +101,7 @@ export default function MintPage() {
                                         <div className="mint-card-info">
                                             Roi
                                             <span className="mint-roi">
-                                                7%
+                                                {state.daiBondROI}
                                             </span>
 
                                         </div>
@@ -113,7 +109,7 @@ export default function MintPage() {
                                         <div className="mint-card-info">
                                             Purchased ($)
                                             <span className="purchased-price">
-                                                1234.4321
+                                                {state.BalanceOfDai}
                                             </span>
 
                                         </div>
