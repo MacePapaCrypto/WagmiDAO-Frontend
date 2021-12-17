@@ -38,10 +38,10 @@ export default function MintModalWenDaiLP() {
             </div>
             <div className="bond-form">
                 <div className="bond-form-tabs">
-                    <a href="#" id="mintTabButton" className="bond-form-tab mint-tab bond-form-tab-active" onClick={() => changeToMintFrame()}>
+                    <a id="mintTabButton" className="bond-form-tab mint-tab bond-form-tab-active" onClick={() => changeToMintFrame()}>
                         Mint
                     </a>
-                    <a href="#" id="redeemTabButton" className="bond-form-tab redeem-tab" onClick={() => changeToRedeemFrame()}>
+                    <a id="redeemTabButton" className="bond-form-tab redeem-tab" onClick={() => changeToRedeemFrame()}>
                         Redeem
                     </a>
                 </div>

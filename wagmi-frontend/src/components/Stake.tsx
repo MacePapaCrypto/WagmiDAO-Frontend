@@ -44,18 +44,18 @@ export default function StakePage() {
         setStakeMode('unstake');
     }
 
-    async function prepApprove(amountToSpend:any) {
+    async function prepApprove() {
         console.log("made inside prep");
         setLoading(true);
-        await approveWenToStake(dispatch, amountToSpend);
+        await approveWenToStake(dispatch);
         setLoading(false);
         console.log(state.isWenApprovedForStaking);
     }
 
-    async function prepUnstakeApprove(amountToSpend:any) {
+    async function prepUnstakeApprove() {
         console.log("made inside prep");
         setLoading(true);
-        await approveStakedWenToUnstake(dispatch, amountToSpend);
+        await approveStakedWenToUnstake(dispatch);
         setLoading(false);
         console.log(state.isWenApprovedForUnstaking);
     }
@@ -105,11 +105,11 @@ export default function StakePage() {
                                     </div>
                                     { 
                                         stakeMode === 'stake' && !state.isWenApprovedForStaking && !loading ?
-                                        <a href="#" className="stake-button" onClick={async () => await prepApprove(spendInput)}>Approve Stake</a> :
+                                        <a href="#" className="stake-button" onClick={async () => await prepApprove()}>Approve Stake</a> :
                                         stakeMode === 'stake' && state.isWenApprovedForStaking && !loading ?
                                         <a href="#" className="stake-button" onClick={async () => await prepStakeWen(spendInput)}>Stake WEN</a> :
                                         stakeMode === 'unstake' && !state.isWenApprovedForUnstaking && !loading ?
-                                        <a href="#" className="stake-button" onClick={async () => await prepUnstakeApprove(spendInput)}>Approve Unstake</a> :
+                                        <a href="#" className="stake-button" onClick={async () => await prepUnstakeApprove()}>Approve Unstake</a> :
                                         stakeMode === 'unstake' && state.isWenApprovedForUnstaking && !loading ?
                                         <a href="#" className="stake-button" onClick={async () => await prepUnstakeWen(spendInput)}>Unstake WEN</a> :
                                         <a className="stake-button">Awaiting Tx...</a>

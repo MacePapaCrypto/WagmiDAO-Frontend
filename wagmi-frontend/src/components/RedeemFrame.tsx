@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { redeemBondsAndStakeForLP, redeemBondsForDai, redeemBondsForLP } from "../functions/ethersFunctions";
+import { redeemBondsForDai, redeemBondsForLP } from "../functions/ethersFunctions";
 import { Context } from "../Store";
 
 export default function RedeemFrame() {
@@ -10,18 +10,16 @@ export default function RedeemFrame() {
         <div className="bond-frame">
             {
                 state.whichBond === 'LP' ? 
-                <><a href="#" className="bond-default-button redeem-button" onClick={() => redeemBondsForLP(dispatch)}>
+                <>
+                    <a href="#" className="bond-default-button redeem-button" onClick={() => redeemBondsForLP(dispatch)}>
                         Claim
-                  </a>
-                  <a href="#" className="bond-default-button redeem-button" onClick={() => redeemBondsAndStakeForLP(dispatch)}>
-                            Claim & Autostake
-                  </a></> :
-                <><a href="#" className="bond-default-button redeem-button" onClick={() => redeemBondsForDai(dispatch)}>
-                    Claim
-                </a>
-                <a href="#" className="bond-default-button redeem-button" onClick={() => redeemBondsForDai(dispatch)}>
-                    Claim & Autostake
-                </a></>
+                    </a>
+                </> :
+                <>
+                    <a href="#" className="bond-default-button redeem-button" onClick={() => redeemBondsForDai(dispatch)}>
+                        Claim
+                    </a>
+                </>
             
             }
             

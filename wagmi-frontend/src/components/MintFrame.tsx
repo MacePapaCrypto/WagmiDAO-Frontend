@@ -31,17 +31,17 @@ export default function MintFrame() {
         fetchApproval();
     }, []);
 
-    async function prepApproveLP(spendInput:any) {
+    async function prepApproveLP() {
         console.log("In prep LP approve");
         setLoading(true);
-        await approveWenDaiLPToMint(dispatch, spendInput);
+        await approveWenDaiLPToMint(dispatch);
         setLoading(false);
     }
 
-    async function prepApproveDai(spendInput:any) {
+    async function prepApproveDai() {
         console.log("In prep DAI approve");
         setLoading(true);
-        await approveDaiToMint(dispatch, spendInput);
+        await approveDaiToMint(dispatch);
         setLoading(false);
     }
 
@@ -59,7 +59,7 @@ export default function MintFrame() {
                     <a 
                         href="#"
                         className="bond-default-button mint-button"
-                        onClick={async () => await prepApproveLP(spendInput)}
+                        onClick={async () => await prepApproveLP()}
                     >
                         Approve LP
                     </a> : (state.whichBond === "LP" && state.isWenDaiLPApprovedForMint && !loading) ?
@@ -73,14 +73,14 @@ export default function MintFrame() {
                             <a 
                                 href="#"
                                 className="bond-default-button mint-button"
-                                onClick={async () => await prepApproveDai(spendInput)}
+                                onClick={async () => await prepApproveDai()}
                             >
                                 Approve Dai
                             </a> : (state.whichBond === "DAI" && state.isDaiApprovedForMint && !loading) ?
                                 <a 
                                     href="#"
                                     className="bond-default-button mint-button"
-                                    onClick={async () => await mintDai(dispatch, spendInput, state.slippage)}
+                                    onClick={async () => await mintDai(dispatch, spendInput, state.slippage, state.wenPrice)}
                                 >
                                     Bond Dai, Mint Wen
                                 </a> : <a className="bond-default-button mint-button">Awaiting Tx...</a>

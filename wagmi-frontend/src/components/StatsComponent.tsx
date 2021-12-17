@@ -28,7 +28,7 @@ export default function StatsComponent() {
 
             <div className="TVLStats">
                 <div className="TVL">
-                    <span>TVL</span> <div className="tvlVal">{state.stakedTVL}</div>
+                    <span>TVL</span> <div className="tvlVal">{state.stakingTVL}</div>
                 </div>
                 <div className="APY">
                     <span>APY</span> <div className="apyVal">{state.stakeAPY}</div>
@@ -41,10 +41,10 @@ export default function StatsComponent() {
             <div className="mintStats">
                 <h3>Mint Discounts</h3>
                 <div className="mintPairs">
-                    <div className="mintPair">WEN-DAI LP</div> <div className="mintDiscount">69.6%</div>
+                    <div className="mintPair">WEN-DAI LP</div> <div className="mintDiscount">{state.lpBondDiscount}</div>
                 </div>
                 <div className="mintPairs">
-                    <div className="mintPair">DAI</div> <div className="mintDiscount">6.69%</div>
+                    <div className="mintPair">DAI</div> <div className="mintDiscount">{state.daiBondDiscount}</div>
                 </div>
             </div>
 
@@ -52,19 +52,19 @@ export default function StatsComponent() {
 
 
                 <div className="stakeInfo">
-                    <div className="stakeInfoTitle">Your Balance</div> <div className="stakeInfoVal">0 WEN</div>
+                    <div className="stakeInfoTitle">Your Balance</div> <div className="stakeInfoVal">{state.wenBalance}</div>
                 </div>
                 <div className="stakeInfo">
-                    <div className="stakeInfoTitle">Your Staked Balance</div> <div className="stakeInfoVal">0 sWEN</div>
+                    <div className="stakeInfoTitle">Your Staked Balance</div> <div className="stakeInfoVal">{state.sWenBalance}</div>
                 </div>
                 <div className="stakeInfo">
-                    <div className="stakeInfoTitle">Next Reward Yield</div> <div className="stakeInfoVal">0.8140%</div>
+                    <div className="stakeInfoTitle">Next Reward Yield</div> <div className="stakeInfoVal">{state.nextRewardYield}</div>
                 </div>
                 <div className="stakeInfo">
-                    <div className="stakeInfoTitle">Next Reward Amount</div> <div className="stakeInfoVal">0 WEN</div>
+                    <div className="stakeInfoTitle">Next Reward Amount</div> <div className="stakeInfoVal">{state.nextRewardAmount}</div>
                 </div>
                 <div className="stakeInfo">
-                    <div className="stakeInfoTitle">ROI (5-Day Rate)</div> <div className="stakeInfoVal">12.9320%</div>
+                    <div className="stakeInfoTitle">ROI (5-Day Rate)</div> <div className="stakeInfoVal">{state.stakeROI}</div>
                 </div>
 
 

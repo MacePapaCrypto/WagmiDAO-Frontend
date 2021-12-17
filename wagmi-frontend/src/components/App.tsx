@@ -41,11 +41,12 @@ function App() {
   }
 
   const fetchWenMarketCap = async () => {
+    console.log((state.wenPrice * state.totalSupply).toString());
     dispatch({type: 'marketCap', content: (state.wenPrice * state.totalSupply)});
   }
 
   const fetchStakingTVL = async () => {
-    await getStakingTVL(dispatch);
+    await getStakingTVL(dispatch, state.wenPrice);
   }
   
   const fetchStakeAPY = async () => {
@@ -89,11 +90,11 @@ function App() {
     fetchWenPrice();
     fetchWenSupply();
     fetchWenMarketCap();
-    //fetchStakingTVL();
-    //fetchStakeAPY();
-    //fetchTreasuryTVL();
-    //fetchROI();
-    //fetchClaimableRewards();
+    fetchStakingTVL();
+    fetchStakeAPY();
+    fetchTreasuryTVL();
+    fetchROI();
+    fetchClaimableRewards();
     fetchDaiBalance();
     fetchLPBalance();
   }, [state.triggerAll]);

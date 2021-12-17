@@ -18,11 +18,14 @@ export const defaultState = {
     totalWenSupply: 0,
     backingPerWen: 0,
     treasuryTVL: 0,
+    stakingTVL: 0,
     stakeAPY: 0,
     wenStaked: 0,
     claimableRewards: 0,
     lpBondROI: 0,
     daiBondROI: 0,
+    lpBondDiscount: 0,
+    daiBondDiscount: 0,
     timeLeftVested: 0,
     balanceOfLP: 0,
     index: 0,
@@ -30,6 +33,10 @@ export const defaultState = {
     lpDiscount: 0,
     maxPayoutDai: 0,
     maxPayoutLP: 0,
+    nextRewardYield: 0,
+    nextRewardAmount: 0,
+    stakeROI: 0,
+    balanceOfDai: 0,
 };
 
 const formatAddress = (addressString:any) => {
@@ -196,6 +203,41 @@ const Reducer = (state:any, action:any) => {
           return {
             ...state,
             maxPayoutLP: action.content
+          }
+        case 'stakingTVL':
+          return {
+            ...state,
+            stakingTVL: action.content
+          }
+        case 'nextRewardYield':
+          return {
+            ...state,
+            nextRewardYield: action.content
+          }
+        case 'nextRewardAmount':
+          return {
+            ...state,
+            nextRewardAmount: action.content
+          }
+        case 'stakeROI':
+          return {
+            ...state,
+            stakeROI: action.content
+          }
+        case 'lpBondDiscount':
+          return {
+            ...state,
+            lpBondDiscount: action.content
+          }
+        case 'daiBondDiscount':
+          return {
+            ...state,
+            daiBondDiscount: action.content
+          }
+        case 'balanceOfDai':
+          return {
+            ...state,
+            balanceOfDai: action.content
           }
     default:
       return state;
